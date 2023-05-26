@@ -1,0 +1,174 @@
+/*
+Task 1
+
+In the given dataset, the dir (director) and ctry (country) columns have
+missing values that contain meaningful information. To make the data more
+user friendly, write a single SELECT statement that: 
+
+a replaces “-” with not given for both columns.
+
+b Renames dir as director and ctry as country. Make each word  
+in these columns start with a capital letter.*/
+
+
+select * from movies
+
+update movies
+set ctry = 'not given'
+where ctry = '-'
+
+alter table movies
+rename column dir to director; 
+
+alter table movies
+rename column ctry to country ;
+
+/*
+Task 2
+
+The management wanted to see the months when the shows were released.
+However, we do not have this information in our table explicitly.  
+Write an SQL statement to create a column “month_added“ containing the
+months extracted from the “date_added.“ 
+
+Make it reading friendly using conditional case structure so that “1“ turns  
+into “Jan,“ and “2“ turns into “Feb,“ and so on.*/
+
+
+select * from movies
+
+select extract (month from date_added) from movies
+
+alter table movies
+add column month_added varchar(10)
+
+update movies 
+set month_added = extract (month from date_added)
+	
+
+select month_added,
+case
+	when month_added = '2' then 'Feb'
+	when month_added = '3' then 'Mar'
+	when month_added = '4' then 'Apr'
+	when month_added = '5' then 'May'
+	when month_added = '6' then 'Jun'
+	when month_added = '7' then 'Jul'
+	when month_added = '8' then 'Aug'
+	when month_added = '9' then 'Sep'
+	when month_added = '10' then 'Oct'
+	when month_added = '11' then 'Nov'
+	when month_added = '12' then 'Dec'
+end 
+from movies
+
+update movies
+set month_added = case
+	when month_added = '1' then 'Jan'
+	when month_added = '2' then 'Feb'
+	when month_added = '3' then 'Mar'
+	when month_added = '4' then 'Apr'
+	when month_added = '5' then 'May'
+	when month_added = '6' then 'Jun'
+	when month_added = '7' then 'Jul'
+	when month_added = '8' then 'Aug'
+	when month_added = '9' then 'Sep'
+	when month_added = '10' then 'Oct'
+	when month_added = '11' then 'Nov'
+	when month_added = '12' then 'Dec'
+end  
+
+
+/*
+Task 3
+
+There is no explicit information if the title is a movie or a TV series. However, the
+duration column has either minutes or the number of seasons in it. 
+
+Create a select statement that has two columns: “duration“ and a conditional
+one named “title_type“ with a “TV series“ value if the corresponding duration
+has “Season“ in it and “Movie“ otherwise.*/
+
+
+
+select * from movies
+
+select duration,
+	case
+		when duration like '%min%' then 'Movie'
+		when duration like '%Sea%' then 'TV Series'
+	end as title_type
+from movies
+
+alter table movies
+add column title_type varchar(20)
+
+update movies
+set title_type = case
+		when duration like '%min%' then 'Movie'
+		when duration like '%Sea%' then 'TV Series'
+	end 
+
+
+
+
+/*
+Task 4
+
+Write an SQL statement that concatenates “rating_1“ and “rating_2“ with “-”
+between the values into a single column and name it “rating.“*/
+
+
+
+select * from movies;
+
+select concat(rating_1,'-',rating_2) from movies;
+
+alter table movies
+add column rating varchar (50);
+
+update movies
+set rating = concat(rating_1,'-',rating_2);
+
+
+
+/*
+
+Task 5
+
+Write a single SQL statement that combines the processing and cleaning steps
+from #1 through #4 above. 
+
+The output data should have the following columns: “show_id,“
+director,“ “country,“ “month_added,“ “date_added,“ “release_year,“
+title_type,“  “rating“ and “duration.“*/
+
+select show_id,director,country,month_added,date_added,release_year,title_type,rating,duration from movies;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
